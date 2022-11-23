@@ -1,48 +1,44 @@
 import java.io.File
+import java.lang.StringBuilder
 import kotlin.reflect.KClass
 import kotlin.reflect.full.memberProperties
 import kotlin.reflect.jvm.isAccessible
 
-class Json(cl: Any) {
-
-    private val cl: Any = cl
-    private val fileName: String = "${cl::class.simpleName.toString()}.json"
+class Json(private val cl: Any) {
 
     fun parseToJson(): String {
-        val listOfParams: List<String> = parseProperies()
-        var json: String = "{\n"
+        val listOfParams: Array<String> = parseParams()
+        val json = StringBuilder("{\n")
         var i = 0
         for (param in listOfParams) {
+            json.append("   \"$param\":")
+            val fieldValue = ((cl::class as KClass<in Any>).memberProperties.elementAt(i).also { it.isAccessible = true }.getter(cl)).toString()
             if ((cl::class as KClass<in Any>).memberProperties.elementAt(i).returnType.toString() == "kotlin.String") {
-                json += "   \"$param\":\"${
-                    (cl::class as KClass<in Any>).memberProperties.elementAt(i)
-                        .also { it.isAccessible = true }.getter(cl)}\""
+                json.append("\"$fieldValue\"")
             } else {
-                json += "   \"$param\":${
-                    (cl::class as KClass<in Any>).memberProperties.elementAt(i)
-                        .also { it.isAccessible = true }.getter(cl)}"
+                json.append(fieldValue)
             }
             if (i < listOfParams.size - 1) {
-                json += ","
+                json.append(",")
             }
-            json += "\n"
+            json.append("\n")
             i += 1
         }
         return "$json}"
     }
 
-    fun parseProperies(): MutableList<String> {
-        val properties: MutableList<String> = mutableListOf()
+    fun parseParams(): Array<String> {
+        var params: Array<String> = arrayOf()
         for (j in cl::class.memberProperties) {
             val x = j.toString()
             val name = x.subSequence(x.indexOf(".") + 1, x.indexOf(":"))
-            properties.add(name.toString())
+            params+=name.toString()
         }
-        return properties
+        return params
     }
 
     fun saveToFile() {
-        val file = File(fileName)
+        val file = File("${cl::class.simpleName.toString()}.json")
         file.writeText(parseToJson())
     }
 }

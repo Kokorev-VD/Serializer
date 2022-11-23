@@ -1,8 +1,19 @@
+import kotlin.system.measureTimeMillis
+
 fun main() {
     val r = R(2, "ab")
-    val user = User(0, "V", listOf(1, 2))
+    val user = User(0,1,2,3,4,5,6, 7, 8, 9, 10,11,12,13,14,15,16, 17, 18, 19,0,1,2,3,4,5,6, 7, 8, 9, 10,11,12,13,14,15,16, 17, 18, 19,0,1,2,3,4,5,6, 7, 8, 9, 10,11,12,13,14,15,16, 17, 18, 19,0,1,2,3,4,5,6, 7, 8, 9, 10,11,12,13,14,15,16, 17, 18, 19,0,1,2,3,4,5,6, 7, 8, 9, 10,11,12,13,14,15,16, 17, 18, 19,0,1,2,3,4,5,6, 7, 8, 9, 10,11,12,13,14,15,16, 17, 18, 19,0,1,2,3,4,5,6, 7, 8, 9, 10,11,12,13,14,15,16, 17, 18, 19,0,1,2,3,4,5,6, 7, 8, 9, 10,11,12,13,14,15,16, 17, 18, 19,0,1,2,3,4,5,6, 7, 8, 9, 10,11,12,13,14,15,16, 17, 18, 19,0,1,2,3,4,5,6, 7, 8, 9, 10,11,12,13,14,15,16, 17, 18, 19)
+    val a = A(4, "asdasd")
     val jsonR = Json(r)
     jsonR.saveToFile()
     val jsonUser = Json(user)
-    jsonUser.saveToFile()
+    var c = StringBuilder("abc")
+    val timeInMillis = measureTimeMillis {
+        repeat(100000) {
+            c.append("a")
+        }
+    }
+    print(timeInMillis)
+    val jsonA = Json(a)
+    jsonA.saveToFile()
 }
