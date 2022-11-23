@@ -1,0 +1,1 @@
+class R(val a: Int, var b: String)
